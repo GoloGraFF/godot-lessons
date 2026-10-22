@@ -10,7 +10,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var new_speed = speed
+	var new_speed: float = speed
 	if Input.is_action_pressed("ui_accept"):
 		new_speed = speed * 2
 	elif Input.is_action_pressed("shift"):
