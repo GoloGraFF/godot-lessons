@@ -13,6 +13,8 @@ func _process(delta: float) -> void:
 	var new_speed = speed
 	if Input.is_action_pressed("ui_accept"):
 		new_speed = speed * 2
+	elif Input.is_action_pressed("shift"):
+		new_speed = speed / 2
 	if Input.is_action_pressed("ui_right"):
 		position.x += new_speed * delta
 		moving = true
