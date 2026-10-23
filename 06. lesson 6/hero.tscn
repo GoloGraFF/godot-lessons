@@ -6,3 +6,10 @@
 [node name="Hero" type="Sprite2D" unique_id=1538399988]
 texture = ExtResource("1_p1r5x")
 script = ExtResource("2_u1ipw")
+
+[node name="HPLabel" type="Label" parent="." unique_id=24902590]
+offset_left = -46.0
+offset_top = -105.0
+offset_right = 46.0
+offset_bottom = -82.0
+text = "HP: 100/100"
