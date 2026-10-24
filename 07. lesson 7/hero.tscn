@@ -15,8 +15,13 @@ offset_bottom = -82.0
 text = "HP: 100/100"
 
 [node name="ZoneLabel" type="Label" parent="." unique_id=1020837683]
-offset_left = -45.0
+offset_left = -44.0
 offset_top = -136.0
-offset_right = -1.0
 offset_bottom = -113.0
 text = "ZONE"
+
+[node name="DangerLabel" type="Label" parent="." unique_id=1050694874]
+offset_left = -47.0
+offset_top = -164.0
+offset_right = -7.0
+offset_bottom = -141.0

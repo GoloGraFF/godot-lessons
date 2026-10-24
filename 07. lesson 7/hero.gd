@@ -39,12 +39,11 @@ func _ready() -> void:
 	
 	
 func _process(delta: float) -> void:
-	$ZoneLabel.text = zone
-	
+	print_zone()
 	var speed: float = default_speed
 	
 	if Input.is_action_pressed("ui_accept") and status != "при смерти":
-		speed *= 2
+		speed *= 2.0
 
 	if is_alive:
 		var moving: bool = false
@@ -66,13 +65,15 @@ func _process(delta: float) -> void:
 			rotation += 2.0 * delta
 		if Input.is_action_just_pressed("ui_cancel"):
 			hp -= damage_point
+			hp = clampi(hp, 0, MAX_HP)
 			update_status()
 			
 		if Input.is_action_just_pressed("ui_focus_next"):
 			hp += heal_point
+			hp = clampi(hp, 0, MAX_HP)
 			update_status()
 			
-		hp = clampi(hp, 0, MAX_HP)
+		
 		$HPLabel.text = "HP: " + str(hp) + "/" + str(MAX_HP) + " (" + status + ")" 
 		if hp == 0:
 			is_alive = false
@@ -91,13 +92,13 @@ func update_status() -> void:
 	
 	match status:
 		"здоров":
-			self.modulate = Color.WHITE
+			self.self_modulate = Color.WHITE
 		"ранен":
-			self.modulate = Color.YELLOW
+			self.self_modulate = Color.YELLOW
 		"при смерти":
-			self.modulate = Color.RED
+			self.self_modulate = Color.RED
 		"убит":
-			self.modulate = Color.BLACK #GRAY не видно изменений
+			self.self_modulate = Color.BLACK #GRAY не видно изменений
 		_:
 			print("неверное значение")
 	
@@ -107,9 +108,26 @@ func decide_zone() -> void:
 	elif position.x >= VILLAGE.x and position.x <= VILLAGE.y:
 		zone = "VILLAGE"
 	elif position.x >= CASTLE.x and position.x <= CASTLE.y:
-		if hp <= 30:
-			zone = "CASTLE (DANGER)"
-		else:
-			zone = "CASTLE"
+		zone = "CASTLE"
 	else:
 		zone = "OUTSIDE ZONE"
+
+func print_zone() -> void:
+	match zone:
+		"FOREST":
+			$ZoneLabel.text = "ЛЕС"
+			$DangerLabel.text = ""
+		"VILLAGE":
+			$ZoneLabel.text = "ДЕРЕВНЯ"
+			$DangerLabel.text = ""
+		"CASTLE":
+			$ZoneLabel.text = "ЗАМОК"
+			if hp <= 30:
+				$DangerLabel.text = "ОПАСНОСТЬ"
+			else:
+				$DangerLabel.text = ""
+		"OUTSIDE ZONE":
+			$ZoneLabel.text = "ЗА ПРЕДЕЛАМИ ЗОНЫ"
+			$DangerLabel.text = ""
+		_:
+			print("произошло странное!!!")
