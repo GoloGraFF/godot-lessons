@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="05. modulo 0 final"
+config/name="08. Урок 8"
 run/main_scene="uid://5itvt47gkw04"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 run/max_fps=30
