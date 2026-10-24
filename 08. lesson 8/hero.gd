@@ -7,8 +7,8 @@ const CORNER: float = 90.51 #половина диагонали квадрат�
 const FOREST: Vector2 = Vector2(0, WIDTH/3.0)
 const VILLAGE: Vector2 = Vector2(WIDTH/3.0, WIDTH*2.0/3.0)
 const CASTLE: Vector2 = Vector2(WIDTH*2.0/3.0, WIDTH)
-
-
+const COMBO_COUNT: int = 3
+const COMBO_DAMAGE: int = 5
 
 
 @export var hero_name: String = "Пустое имя"
@@ -67,13 +67,29 @@ func _process(delta: float) -> void:
 			hp -= damage_point
 			hp = clampi(hp, 0, MAX_HP)
 			update_status()
-			
 		if Input.is_action_just_pressed("ui_focus_next"):
 			hp += heal_point
 			hp = clampi(hp, 0, MAX_HP)
 			update_status()
+		if Input.is_action_just_pressed("ui_page_down"):
+			for i in range(1, COMBO_COUNT+1):
+				print("Удар №",i, ": -", i*COMBO_DAMAGE)
+				hp -= i*COMBO_DAMAGE
+				hp = clampi(hp, 0, MAX_HP)
+				if hp <= 0:
+					print("КОМБО ПРЕРВАНО")
+					break
+			update_status()
+		if Input.is_action_just_pressed("ui_page_up"):
+			var tick: int = 0
+			while hp < 50:
+				hp += 7
+				hp = clampi(hp, 0, MAX_HP)
+				tick += 1
+			if tick > 0:
+				print("Потребовалось ", tick, " тиков")
+			update_status()
 			
-		
 		$HPLabel.text = "HP: " + str(hp) + "/" + str(MAX_HP) + " (" + status + ")" 
 		if hp == 0:
 			is_alive = false
