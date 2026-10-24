@@ -7,10 +7,9 @@
 [node name="HeroA" parent="." unique_id=1538399988 instance=ExtResource("1_ig7tw")]
 position = Vector2(209, 168)
 hero_name = "Герой 1"
-speed = 236.84199999999998
+speed = 236.842
 
 [node name="HeroB" parent="." unique_id=1604779475 instance=ExtResource("1_ig7tw")]
-modulate = Color(0, 1, 0, 1)
 position = Vector2(208, 333)
 hero_name = "Герой 2"
 speed = 357.895
