@@ -4,6 +4,10 @@ const MAX_HP: int = 100
 const HEIGHT: float = 648.00
 const WIDTH: float = 1152.00
 const CORNER: float = 90.51 #половина диагонали квадрата со стороной 128
+const FOREST: Vector2 = Vector2(0, WIDTH/3.0)
+const VILLAGE: Vector2 = Vector2(WIDTH/3.0, WIDTH*2.0/3.0)
+const CASTLE: Vector2 = Vector2(WIDTH*2.0/3.0, WIDTH)
+
 
 
 
@@ -18,20 +22,25 @@ var status: String = "здоров"
 var hp: int = MAX_HP
 var gold: int = 0
 var is_alive: bool = true
-
+var zone: String
 
 
 
 
 func _ready() -> void:
-	print("=== ", hero_name, " ===")
-	print("Уровень: ", level)
-	print("HP: ", hp)
-	print("Скорость: ", default_speed)
-	print("Жив: ", is_alive)
+	#print("=== ", hero_name, " ===")
+	#print("Уровень: ", level)
+	#print("HP: ", hp)
+	#print("Скорость: ", default_speed)
+	#print("Жив: ", is_alive)
 	update_status()
-
+	decide_zone()
+	
+	
+	
 func _process(delta: float) -> void:
+	$ZoneLabel.text = zone
+	
 	var speed: float = default_speed
 	
 	if Input.is_action_pressed("ui_accept") and status != "при смерти":
@@ -68,7 +77,7 @@ func _process(delta: float) -> void:
 		if hp == 0:
 			is_alive = false
 			print(hero_name, " пал")
-
+		decide_zone()
 
 func update_status() -> void:
 	if hp <= 0:
@@ -92,3 +101,15 @@ func update_status() -> void:
 		_:
 			print("неверное значение")
 	
+func decide_zone() -> void:
+	if position.x >= FOREST.x and position.x <= FOREST.y:
+		zone = "FOREST"
+	elif position.x >= VILLAGE.x and position.x <= VILLAGE.y:
+		zone = "VILLAGE"
+	elif position.x >= CASTLE.x and position.x <= CASTLE.y:
+		if hp <= 30:
+			zone = "CASTLE (DANGER)"
+		else:
+			zone = "CASTLE"
+	else:
+		zone = "OUTSIDE ZONE"
