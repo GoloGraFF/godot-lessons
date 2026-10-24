@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://4kcefrcyvfwq"]
+
+[ext_resource type="Texture2D" uid="uid://chlwhkcvod5p5" path="res://icon.svg" id="1_p1r5x"]
+[ext_resource type="Script" uid="uid://b1uapop31ghgd" path="res://hero.gd" id="2_u1ipw"]
+
+[node name="Hero" type="Sprite2D" unique_id=1538399988]
+texture = ExtResource("1_p1r5x")
+script = ExtResource("2_u1ipw")
+
+[node name="HPLabel" type="Label" parent="." unique_id=24902590]
+offset_left = -46.0
+offset_top = -105.0
+offset_right = 46.0
+offset_bottom = -82.0
+text = "HP: 100/100"

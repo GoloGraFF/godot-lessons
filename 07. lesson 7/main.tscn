@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://5itvt47gkw04"]
+
+[ext_resource type="PackedScene" uid="uid://4kcefrcyvfwq" path="res://hero.tscn" id="1_ig7tw"]
+
+[node name="Main" type="Node2D" unique_id=160906281]
+
+[node name="HeroA" parent="." unique_id=1538399988 instance=ExtResource("1_ig7tw")]
+position = Vector2(209, 168)
+hero_name = "Герой 1"
+speed = 236.84199999999998
+
+[node name="HeroB" parent="." unique_id=1604779475 instance=ExtResource("1_ig7tw")]
+modulate = Color(0, 1, 0, 1)
+position = Vector2(208, 333)
+hero_name = "Герой 2"
+speed = 357.895
+
+[node name="Label" type="Label" parent="." unique_id=129844]
+offset_left = 458.0
+offset_top = 14.0
+offset_right = 498.0
+offset_bottom = 37.0
+text = "Движение - Стрелки"
