@@ -1,22 +1,25 @@
 extends Sprite2D
 
 const MAX_HP: int = 100
+const HEIGHT: float = 648.00
+const WIDTH: float = 1152.00
+const CORNER: float = 90.51 #половина диагонали квадрата со стороной 128
+
+
 
 @export var hero_name: String = "Пустое имя"
 @export_range(200.00, 500.00) var speed: float = 200.0
 @export_range(1, 10) var level: int = 1
-@export var damage_point:int = 10
-@export var heal_point:int = 10
+@export var damage_point: int = 10
+@export var heal_point: int = 10
 
 var hp: int = MAX_HP
-var gold:int = 0
+var gold: int = 0
 var is_alive: bool = true
 
 
 
-var height: float = 648.00
-var wigth: float = 1152.00
-var corner: float = 90.51 #половина диагонали квадрата со стороной 128
+
 
 func _ready() -> void:
 	print("=== ", hero_name, " ===")
@@ -42,8 +45,8 @@ func _process(delta: float) -> void:
 		if Input.is_action_pressed("ui_down"):
 			position.y += speed * delta
 			moving = true
-		position.x = clamp(position.x, 0+corner, wigth-corner)
-		position.y = clamp(position.y, 0+corner, height-corner) 
+		position.x = clamp(position.x, CORNER, WIDTH-CORNER)
+		position.y = clamp(position.y, CORNER, HEIGHT-CORNER) 
 		if moving:
 			rotation += 2.0 * delta
 		if Input.is_action_just_pressed("ui_cancel"):
