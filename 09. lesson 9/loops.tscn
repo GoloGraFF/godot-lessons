@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://qe3kyjna4mvd"]
+
+[ext_resource type="Script" uid="uid://ctm1blb1koox5" path="res://loops.gd" id="1_moljs"]
+[ext_resource type="Texture2D" uid="uid://chlwhkcvod5p5" path="res://icon.svg" id="2_eika1"]
+
+[node name="Loops" type="Node2D" unique_id=1710735296]
+script = ExtResource("1_moljs")
+
+[node name="Stars" type="Node2D" parent="." unique_id=1383135973]
+
+[node name="Star1" type="Sprite2D" parent="Stars" unique_id=511325044]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star2" type="Sprite2D" parent="Stars" unique_id=445808088]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star3" type="Sprite2D" parent="Stars" unique_id=38172823]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star4" type="Sprite2D" parent="Stars" unique_id=1710720753]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star5" type="Sprite2D" parent="Stars" unique_id=193613398]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star6" type="Sprite2D" parent="Stars" unique_id=452639162]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
+
+[node name="Star7" type="Sprite2D" parent="Stars" unique_id=1996830762]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_eika1")
