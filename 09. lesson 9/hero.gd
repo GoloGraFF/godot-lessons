@@ -4,11 +4,8 @@ const MAX_HP: int = 100
 const HEIGHT: float = 648.00
 const WIDTH: float = 1152.00
 const CORNER: float = 90.51 #половина диагонали квадрата со стороной 128
-const FOREST: Vector2 = Vector2(0, WIDTH/3.0)
-const VILLAGE: Vector2 = Vector2(WIDTH/3.0, WIDTH*2.0/3.0)
-const CASTLE: Vector2 = Vector2(WIDTH*2.0/3.0, WIDTH)
-const COMBO_COUNT: int = 3
-const COMBO_DAMAGE: int = 5
+const COMBO_COUNT: int = 6
+const COMBO_DAMAGE: int = 1
 
 
 @export var hero_name: String = "Пустое имя"
@@ -16,7 +13,7 @@ const COMBO_DAMAGE: int = 5
 @export_range(1, 10) var level: int = 1
 @export var damage_point: int = 10
 @export var heal_point: int = 10
-
+@export var is_player: bool = true
 
 var status: String = "здоров"
 var hp: int = MAX_HP
@@ -28,18 +25,14 @@ var zone: String
 
 
 func _ready() -> void:
-	#print("=== ", hero_name, " ===")
-	#print("Уровень: ", level)
-	#print("HP: ", hp)
-	#print("Скорость: ", default_speed)
-	#print("Жив: ", is_alive)
 	update_status()
-	decide_zone()
-	
-	
+	update_label()
 	
 func _process(delta: float) -> void:
-	print_zone()
+	if not is_player:
+		return
+		
+	update_label()
 	var speed: float = default_speed
 	
 	if Input.is_action_pressed("ui_accept") and status != "при смерти":
@@ -59,8 +52,9 @@ func _process(delta: float) -> void:
 		if Input.is_action_pressed("ui_down"):
 			position.y += speed * delta
 			moving = true
-		position.x = clamp(position.x, CORNER, WIDTH-CORNER)
-		position.y = clamp(position.y, CORNER, HEIGHT-CORNER) 
+		
+		position = clamp_to_screen(position)
+		
 		if moving:
 			rotation += 2.0 * delta
 		if Input.is_action_just_pressed("ui_cancel"):
@@ -72,29 +66,16 @@ func _process(delta: float) -> void:
 			hp = clampi(hp, 0, MAX_HP)
 			update_status()
 		if Input.is_action_just_pressed("ui_page_down"):
-			for i in range(1, COMBO_COUNT+1):
-				print("Удар №",i, ": -", i*COMBO_DAMAGE)
-				hp -= i*COMBO_DAMAGE
-				hp = clampi(hp, 0, MAX_HP)
-				if hp <= 0:
-					print("КОМБО ПРЕРВАНО")
-					break
-			update_status()
+			take_damage(COMBO_DAMAGE)
+			
 		if Input.is_action_just_pressed("ui_page_up"):
-			var tick: int = 0
-			while hp < 50:
-				hp += 7
-				hp = clampi(hp, 0, MAX_HP)
-				tick += 1
-			if tick > 0:
-				print("Потребовалось ", tick, " тиков")
-			update_status()
+			heal()
 			
 		$HPLabel.text = "HP: " + str(hp) + "/" + str(MAX_HP) + " (" + status + ")" 
 		if hp == 0:
 			is_alive = false
 			print(hero_name, " пал")
-		decide_zone()
+
 
 func update_status() -> void:
 	if hp <= 0:
@@ -117,18 +98,10 @@ func update_status() -> void:
 			self.self_modulate = Color.BLACK #GRAY не видно изменений
 		_:
 			print("неверное значение")
-	
-func decide_zone() -> void:
-	if position.x >= FOREST.x and position.x <= FOREST.y:
-		zone = "FOREST"
-	elif position.x >= VILLAGE.x and position.x <= VILLAGE.y:
-		zone = "VILLAGE"
-	elif position.x >= CASTLE.x and position.x <= CASTLE.y:
-		zone = "CASTLE"
-	else:
-		zone = "OUTSIDE ZONE"
+	$HPLabel.self_modulate = get_hp_color(hp, MAX_HP)
 
-func print_zone() -> void:
+func update_label() -> void:
+	zone = get_zone(position.x)
 	match zone:
 		"FOREST":
 			$ZoneLabel.text = "ЛЕС"
@@ -147,3 +120,61 @@ func print_zone() -> void:
 			$DangerLabel.text = ""
 		_:
 			print("произошло странное!!!")
+
+
+func take_damage(amount: int) -> void:
+	if not is_alive:
+		return
+	for i in range(1, COMBO_COUNT+1):
+		print("Удар №",i, ": -", calc_damage(amount, i))
+		hp -= calc_damage(amount, i)
+		hp = clampi(hp, 0, MAX_HP)
+		if hp <= 0:
+			print("КОМБО ПРЕРВАНО")
+			break
+	update_status()
+
+
+func heal(amount: int = 1) -> void:
+	var tick: int = 0
+	while hp < 50:
+		hp += amount
+		hp = clampi(hp, 0, MAX_HP)
+		tick += 1
+	if tick > 0:
+		print("Потребовалось ", tick, " тиков")
+	update_status()
+
+func get_zone(x: float) -> String:
+	if x >= 0 and x < WIDTH/3.0:
+		return "FOREST"
+	elif x <= WIDTH*2.0/3.0:
+		return "VILLAGE"
+	elif x <= WIDTH:
+		return "CASTLE"
+	else:
+		return "OUTSIDE ZONE"
+	
+
+func clamp_to_screen(pos: Vector2) -> Vector2:
+	return Vector2(
+		clamp(pos.x, CORNER, WIDTH-CORNER), 
+		clamp(pos.y, CORNER, HEIGHT-CORNER)
+		)
+
+func calc_damage(base: int, combo_step: int) -> int:
+	if combo_step % 3 == 0 and combo_step != 1:
+		return (base + combo_step)*2
+	else:
+		return base + combo_step
+
+func get_hp_color(current: int, maximum: int) -> Color:
+	var percent_hp: float = float(current) / maximum
+	if  percent_hp >= 0.6:
+		return Color.GREEN
+	elif percent_hp >= 0.3:
+		return Color.YELLOW
+	elif percent_hp >= 0.01:
+		return Color.RED
+	else:
+		return Color.BLACK
